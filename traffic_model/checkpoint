@@ -1,0 +1,2 @@
+model_checkpoint_path: "MSlenet3"
+all_model_checkpoint_paths: "MSlenet3"
