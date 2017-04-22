@@ -2,10 +2,16 @@
 
 ## Writeup by Tony Knight - 2017/04/21 
 
+![image1](examples\TestSamples\keepright.png "Keep Right!")
+
+
+
+
 
 [//]: # (Image References)
 
-[image1]: ./examples/visualization.jpg "Visualization"
+
+
 [image2]: ./examples/grayscale.jpg "Grayscaling"
 [image3]: ./examples/random_noise.jpg "Random Noise"
 [image4]: ./examples/placeholder.png "Traffic Sign 1"
@@ -14,59 +20,117 @@
 [image7]: ./examples/placeholder.png "Traffic Sign 4"
 [image8]: ./examples/placeholder.png "Traffic Sign 5"
 
-## Rubric Points
-###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
 
 ---
 ###Writeup / README
 
-####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. You can use this template as a guide for writing the report. The submission includes the project code.
-
-You're reading it! and here is a link to my [project code](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
+Here is a link to my [project code](https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_ClassifierV2_2.ipynb)
 
 ###Data Set Summary & Exploration
 
-####1. Provide a basic summary of the data set and identify where in your code the summary was done. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.
+####1. 
+I computed statistics on the data set using numpy and Panda and standard python math.  This was completed in code cells 3 through 7 on both the original data, the images converted to contrast enhanced grayscale images and, a subset of equalized training images.   The relevant stats are:
 
-The code for this step is contained in the second code cell of the IPython notebook.  
+| Image Set        | Count |
+|:-----------------|------:|
+|Training examples | 34799 |
+|Validation examples | 4410 |
+|Testing examples | 12630 |
 
-I used the pandas library to calculate summary statistics of the traffic
-signs data set:
+The image data shape is (32, 32, 3) which is in an RGB format.
 
-* The size of training set is ?
-* The size of test set is ?
-* The shape of a traffic sign image is ?
-* The number of unique classes/labels in the data set is ?
+The number of classes is 43.  After loading the signnames file, I was able to use Pandas Dataframe to generate a listed breakdown of the image class in the validation set by signname.
 
-####2. Include an exploratory visualization of the dataset and identify where the code is in your code file.
 
-The code for this step is contained in the third code cell of the IPython notebook.  
+| Sign Identification                       | Count of Images|
+|:---------------------------------------------------|------:|
+|Ahead only                                          |  1080 |
+|Beware of ice/snow                                  |   390 |
+|Bicycles crossing                                   |   240 |
+|Bumpy road                                          |   330 |
+|Children crossing                                   |   480 |
+|Dangerous curve to the left                         |   180 |
+|Dangerous curve to the right                        |   300 |
+|Double curve                                        |   270 |
+|End of all speed and passing limits                 |   210 |
+|End of no passing                                   |   210 |
+|End of no passing by vehicles over 3.5 metric tons  |   210 |
+|End of speed limit (80km/h)                         |   360 |
+|General caution                                     |  1080 |
+|Go straight or left                                 |   180 |
+|Go straight or right                                |   330 |
+|Keep left                                           |   270 |
+|Keep right                                          |  1860 |
+|No entry                                            |   990 |
+|No passing                                          |  1320 |
+|No passing for vehicles over 3.5 metric tons        |  1800 |
+|No vehicles                                         |   540 |
+|Pedestrians                                         |   210 |
+|Priority road                                       |  1890 |
+|Right-of-way at the next intersection               |  1170 |
+|Road narrows on the right                           |   240 |
+|Road work                                           |  1350 |
+|Roundabout mandatory                                |   300 |
+|Slippery road                                       |   450 |
+|Speed limit (100km/h)                               |  1290 |
+|Speed limit (120km/h)                               |  1260 |
+|Speed limit (20km/h)                                |   180 |
+|Speed limit (30km/h)                                |  1980 |
+|Speed limit (50km/h)                                |  2010 |
+|Speed limit (60km/h)                                |  1260 |
+|Speed limit (70km/h)                                |  1770 |
+|Speed limit (80km/h)                                |  1650 |
+|Stop                                                |   690 |
+|Traffic signals                                     |   540 |
+|Turn left ahead                                     |   360 |
+|Turn right ahead                                    |   599 |
+|Vehicles over 3.5 metric tons prohibited            |   360 |
+|Wild animals crossing                               |   690 |
+|Yield                                               |  1920 |
 
-Here is an exploratory visualization of the data set. It is a bar chart showing how the data ...
+I also observed how Pandas could output stats about individual columns in the dataframe.  The individual column values had been calculated on individual images in the grayscale dataset.
 
-![alt text][image1]
+|stat |      X_max  |    X_mean   |     X_min   |     X_std   |      X_sum |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+|count| 34799.000000  | 34799.000000 | 34799.000000 | 34799.000000 |  34799.000000 |  
+|mean |    254.995862 |   139.554981 |     6.117503 |    63.027796 | 142904.300181 |  
+|std  |      0.131900 |    11.417725 |     7.621655 |     7.089961 |  11691.750853 |  
+|min  |    244.000000 |    97.950195 |     1.000000 |    35.793909 | 100301.000000 |  
+|25%  |    255.000000 |   132.451172 |     2.000000 |    58.799550 | 135630.000000 |  
+|50%  |    255.000000 |   136.599609 |     4.000000 |    64.331295 | 139878.000000 |  
+|75%  |    255.000000 |   142.957520 |     6.000000 |    68.217517 | 146388.500000 |  
+|max  |    255.000000 |   225.502930 |    70.000000 |    79.894665 | 230915.000000 |  
 
-###Design and Test a Model Architecture
 
-####1. Describe how, and identify where in your code, you preprocessed the image data. What tecniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc.
 
-The code for this step is contained in the fourth code cell of the IPython notebook.
+####2. Exploratory Visualization
 
-As a first step, I decided to convert the images to grayscale because ...
+The code for this step is contained in the fourth through seventh code cells of the Jupyter notebook.  
 
-Here is an example of a traffic sign image before and after grayscaling.
+Here is an exploratory visualization of the data sets. It is a bar chart showing how the data is distributed between the classes in each of the sets.
+
+![3 Bar charts]( )
+
+I also investigated how the pixel intensities were distributed after contrast enhancing the grayscale images.  There appear to be some interesting artefacts in this data, and I am concerned by how many pixel values were clipped at the maximum level of 255, however, the general shape of the data set looks like a somewhat squished normal distribution, which bodes well for analysis.
+
+![CLAHE Pixel Histogram]()
+
+
+### Model Architecture Design and Tests
+
+I initially used an implementation of the LeNet model.  To feed the model, I began by using the raw RGB data to see how the model would work.  I was able to get about 90% accuracy on the training data set.  I then switched to using HSV image data by converting the images using openCV functions.  However, this did not help improve results.
+
+I switched to using CLAHE (Contrast-Limited Adaptive Histogram Equalization) enhanced grayscaled versions of the image. I found that there was a large difference in the brightness of the images, and I wanted to try and compensate for this.  I had also read articles indicating that CLAHE was useful in traffic sign recognition (although it was usually done in HSV space not on grayscale images)   The code to convert the images is found in code cell 2 of the notebook.  I tried using both Scipy Image (skimage) and opencv (cv2) routines to complete the CLAHE enhancement after grayscaling the image.  I experimented with different tiling and cliplimit values to obtain both the best visual result, and a good pixel distribution (see image x above).
+
+Here is an example of a traffic sign image before and after grayscaling and CLAHE enhancement.
 
 ![alt text][image2]
 
-As a last step, I normalized the image data because ...
+As a last step, I normalized the image data using the individual image mean and standard deviation to produce images with pixel intensities having a standard deviations of 1 centered at 0.   used in some cases
 
-####2. Describe how, and identify where in your code, you set up training, validation and testing data. How much data was in each set? Explain what techniques were used to split the data into these sets. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, identify where in your code, and provide example images of the additional data)
+####2. Starting with the training, validation, and test data sets provided, I used two strategies to try and improve validation accuracy.  I tried equalizing the training data set so that there were an even number of images in each class of image, and this way the model would not be biased to select images that were overrepresented in the training dataset.  However, this did not help, possibly because this limited the size of the training set too much.  I also tried augmenting the training dataset by adding distortions of the original images.  In code cells 11 to 19 I added images that had random amounts of motion blur, reduced scaling, displacement, rotation, and fixed perspective distortions (tilts) up left right and down.
 
-The code for splitting the data into training and validation sets is contained in the fifth code cell of the IPython notebook.  
-
-To cross validate my model, I randomly split the training data into a training set and validation set. I did this by ...
-
-My final training set had X number of images. My validation set and test set had Y and Z number of images.
+My final training set had 313191 images. My validation set and test set had Y and Z number of images.
 
 The sixth code cell of the IPython notebook contains the code for augmenting the data set. I decided to generate additional data because ... To add more data to the the data set, I used the following techniques because ... 
 
