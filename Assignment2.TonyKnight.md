@@ -14,7 +14,7 @@ Here is a link to my [project code](https://github.com/teeekay/CarND-Traffic-Sig
 
 ### Data Set Summary & Exploration
 
-I computed statistics on the provided traffic signs data sets using numpy, pandas and standard python math.  This was completed in code cells 3 through 7 on the original data set, on the images converted to contrast enhanced grayscale images and, on a subset of training images equalized across classes.   The relevant stats for the datasets as presented in Table 1.
+I computed statistics on the provided traffic signs data sets using numpy, pandas and standard python math.  This was completed in code cells 3 through 7 on the original data set, on the images converted to contrast enhanced grayscale images and, on a subset of training images equalized across classes.
 
 ---
 
@@ -27,9 +27,9 @@ I computed statistics on the provided traffic signs data sets using numpy, panda
 
 ---
 
-The image data was provided in arrays of 32x32x3 with RGB intensities provided as integer values between 0 and 255.
+Table 1 presents the count of images in each of the 3 datasets provided by Udacity for this project.
 
-The number of classes of traffic signs in each dataset is 43.  After loading the signnames file, I was able to use the Pandas dataframe to generate a listed breakdown of the image class in the training set by signname which is provided in Table 2.
+The image data was provided in arrays of 32x32x3 with RGB intensities provided as integer values between 0 and 255.  The number of classes of traffic signs in each dataset is 43.  After loading the signnames file, I was able to use the Pandas dataframe to generate a listed breakdown of the image class in the training set by signname, and this is presented in Table 2.
 
 ---
 
@@ -83,8 +83,7 @@ The number of classes of traffic signs in each dataset is 43.  After loading the
 
 ---
 
-
-I also observed how Pandas could output stats about individual columns in the dataframe.  The individual column values had been calculated on individual images in the grayscale dataset.
+I also observed how Pandas could output stats about individual columns in the dataframe (see Table 3).  The individual column values ( X_max, X_mean, X_min, X_std, X_sum) had been calculated on individual images in the grayscale dataset.
 
 ---
 
@@ -103,10 +102,9 @@ I also observed how Pandas could output stats about individual columns in the da
 
 ---
 
+The code to produce visualizations of the data distribution is contained in the fourth through seventh code cells of the Jupyter notebook.  
 
-The code to produce the visualizations of the data distribution is contained in the fourth through seventh code cells of the Jupyter notebook.  
-
-Bar charts showing how the images are distributed between the classes in each of the datasets are shown in Figure 2.
+Bar charts showing how the images are distributed between the classes in each of the datasets are shown in Figure 2.  It is clear that the images are not evenly distributed by class, but that the distribution appears relatively similar between datasets.
 
 ---
 
@@ -116,7 +114,7 @@ Bar charts showing how the images are distributed between the classes in each of
 
 ---
 
-I investigated how the pixel intensities were distributed after contrast enhancing the grayscale images.  There appear to be some interesting artefacts in this data, and I am concerned by how many pixel values were clipped at the maximum level of 255, however, the general shape of the data set looks like a "normal" distribution, which bodes well for analysis.
+I investigated how the pixel intensities were distributed after contrast enhancing the grayscale images.  The histogram is presented in Figure 3.  There appear to be some interesting artefacts in this data, and I am concerned by how many pixel values were clipped at the maximum level of 255, however, the general shape of the data set looks like a "normal" distribution, which bodes well for analysis.
 
 ---
 
@@ -126,7 +124,7 @@ I investigated how the pixel intensities were distributed after contrast enhanci
 
 ---
 
-After normalizing the data to a standard deviation of 1 and a mean of 0, the pixel intensity distribution looks like this:
+The data distribution sfter normalizing the data to a standard deviation of 1 and a mean of 0 is presented in Figure 4.
 
 ---
 
@@ -136,9 +134,9 @@ After normalizing the data to a standard deviation of 1 and a mean of 0, the pix
 
 ---
 
-### Model Architecture Design and Tests
+### Initial Model Architecture and Image PreProcessing
 
-I initially used the LeNet-5 implementation of a standard 2 layer feed forward convolutional network activated by softmax and ReLU functions which I had developed in the earlier TensorFlow project.
+I initially used the LeNet-5 implementation consisting of a standard 2 layer feed forward convolutional network activated by softmax and ReLU functions which I had developed in the earlier TensorFlow project for Udacity.
 
 To feed the model, I started by using the raw RGB image data to see how the model would work.  I was able to get about 90% accuracy on the training data set.  I then switched to using HSV image data by converting the images using the openCV functions.  However, this did not improve results.  I read in the paper by [Sermanet and LeCun](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf) that they were able to get highest accuracy when using only grayscale (Y channel) information, so I decided to try using just grayscale information.
 
@@ -188,12 +186,24 @@ My final training set had 313191 images. My validation set and test set remained
 
 Comments in the Sermanet and Lecun paper indicated that care should be taken to ensure that the validation set did not include images that were taken from the same run of images taken from the same sign, as this would not give the best indication of how well the model worked on general examples of the signs.  I had not checked this.
 
-An example of an original Grayscale Image and a set of the augmented images generated from it are presented in Figure 6
+An example of an original Grayscale Image and a set of the augmented images generated from it are presented in Figure 6.
+
 ---
 
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/traffic.png?raw=true" alt="Original and augmented versions of Traffic Sign Image" width=400>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/orig.png?raw=true" alt="Original" width=200>
 
-<U><B>Figure 6:</B><I> Original grayscale image of traffic sign nd set of augmented images produced from it</I></U>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/blur.png?raw=true" alt="Augmented" width=200>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/displaced.png?raw=true" alt="Augmented" width=200>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/rotated.png?raw=true" alt="Augmented" width=200>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/scaled.png?raw=true" alt="Augmented" width=200>
+
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/tiltup.png?raw=true" alt="Augmented" width=200>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/tiltdown.png?raw=true" alt="Augmented" width=200>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/tiltleft.png?raw=true" alt="Augmented" width=200>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/tiltright.png?raw=true" alt="Augmented" width=200>
+
+
+<U><B>Figure 6:</B><I> Original grayscale image of traffic sign and set of augmented images produced from it</I></U>
 
 ---
 
@@ -416,18 +426,18 @@ Based on the precision and recall report (table ) and confusion matrix (Figure  
 
 ---
 
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/1speed60.png?raw=true" width=100>
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/2speed60.png.png?raw=true" width=100>
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/3speed70.png?raw=true" width=100>
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/4speed70.png?raw=true" width=100>
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/5speed80.png?raw=true" width=100>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/1speed60.png?raw=true" width=150>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/2speed60.png?raw=true" width=150>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/3speed70.png?raw=true" width=150>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/4speed70.png?raw=true" width=150>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/5speeed80.png?raw=true" width=150>
 
 
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/6noentry.png?raw=true" width=100>
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/7notrucks.png?raw=true" width=100>
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/8pedestrians.png?raw=true" width=100>
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/9notruckpassing.png?raw=true" width=100>
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/10roundabout.png?raw=true" width=100>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/6noentry.png?raw=true" width=150>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/7notrucks.png?raw=true" width=150>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/8pedestrians.png?raw=true" width=150>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/9notruckpassing.png?raw=true" width=150>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/10roundabout.png?raw=true" width=150>
 
 <U><B>Figure 9:</B><I> 10 sign images incorrectly classified by the model</I></U>
 
@@ -471,14 +481,38 @@ I created a random noise image (image 10) and ran it through the model. The top 
 
 ### Visualization of Feature Maps
 
-I created code to enable visualization of the feature maps for any image at all stages where the map was still rectangular (before flattening) which is in code cell .  I found that the output of the layer 1 max pooling stage provided the best visual clues to how the model was working.  Figure 10 presents the feature maps for a "Keep Right" sign image before and after the model has been trained.
+---
+
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/KeeprightuntrainedmodelL1maxpool.png?raw=true" width=300>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/KeeprighttrainedmodelL1maxpool.png?raw=true" width=300>
+
+<U><B>Figure 10:</B><I> L1 Pool Feature map for keep right sign before and after training</I></U>
+
+---
+
+I created code to enable visualization of the feature maps for any image at all stages where the map was still rectangular (before flattening) which is in code cell .  I found that the output of the layer 1 max pooling stage provided the best visual clues to how the model was working.  
+
+Figure 10 presents the feature maps for a "Keep Right" sign image before and after the model has been trained.  Whereas in the initial model the arrow and edge of the sign generally appear to have lower weighting, after being trained, these are the areas that are given highest weights and other areas of the sign are given no weight.
 
 
 ### Additional Work
+---
 
-I think that the following areas could have been investigated to see if the model could be improved:
-
+|Area | Investigate |
+|:--:|:-------|
+| Dataset Composition | Verify images in validation set are not part of "runs" of same exact sign present in training set |
 | Augmentation | Produce sets of images with artificial shading of portions of the sign | 
+| Augmentation | Investigate if CLAHE is introducing features on blank areas of solid color | 
+| Augmentation | Produce sets of images with glare spots on the sign | 
+| PreProcessing | Standardizing to a range of 1 |
+| Architecture | Conduct more investigation into the use of color information |
 | Architecture | Investigate effect of use of more layers |
+| Architecture | Investigate effect of changing the size of the layers |
+| Architecture | Investigate use of batch normalization between layers |
 
+<U><B>Table 10:</B><I> Recommendations for Additional work to Improve the model</I></U>
+
+---
+
+Table 10 presents areas that could be investigated to see if the model's prediction could be improved, however, I ran out of time and was not able to investigate them.
 
