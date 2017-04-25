@@ -142,7 +142,7 @@ To feed the model, I started by using the raw RGB image data to see how the mode
 
 I found that there was a large visual difference in the brightness of the images, and I wanted to try and compensate for this.  I switched to using CLAHE (Contrast-Limited Adaptive Histogram Equalization) enhanced grayscaled versions of the image.   I had also read articles including Nvidia's ["End to End Learning for Self-Driving Cars"](https://arxiv.org/pdf/1604.07316v1.pdf) document indicating that CLAHE was useful in traffic sign recognition (although it was usually done in HSV space not on grayscale images).  
 
-The code I used to convert the images is found in code cell 2 of the notebook.  I tested using both Scipy Image (skimage) and opencv (cv2) routines to complete the CLAHE enhancement after grayscaling the image.  I experimented with different tiling and cliplimit values to obtain both the best visual result, and a good pixel distribution (see image x above).
+The code I used to convert the images is found in code cell 2 of the notebook.  I tested using both Scikit Image (skimage) and openCV (cv2) routines to complete the CLAHE enhancement after grayscaling the image.  I experimented with different tiling and cliplimit values to obtain both the best visual result, and a good pixel distribution.
 
 An example of a traffic sign image before and after grayscaling and CLAHE enhancement with skimage and cv2 is presented in figure 5.
 
@@ -157,11 +157,12 @@ An example of a traffic sign image before and after grayscaling and CLAHE enhanc
 
 ---
 
-As a last step, I normalized the image data using the individual image mean and standard deviation to produce images with pixel intensities having a standard deviations of 1 centered at 0.
+As a last step, I normalized the image data using the individual image mean and standard deviation to produce images with pixel intensities having a standard deviation of 1, centered at 0 (Code Cell 19).
+
 
 #### Augmentation and Equalization of Datasets
 
-Starting with the training, validation, and test data sets provided, I used two strategies to try and improve validation accuracy.  First, I tried equalizing the training data set so that there were an equal number of images in each class of image, and in this way the model would not be biased to select images that were over-represented in the training dataset.  However, In my tests, this did not improve validation or test accuracy, possibly because this limited the size of the training set too much.
+I used two strategies to try and improve validation accuracy by adjusting the training data.  First, I tried equalizing the training data set so that there were an equal number of images in each class of image, and in this way the model would not be biased to select images that were over-represented in the training dataset (Code cell 6).  However, In my tests, this did not improve validation or test accuracy, possibly because this limited the size of the training set too much.
 
 Secondly , I tried augmenting the training dataset by adding distortions of the original images.  In code cells 10 to 18 I generated copies of the validation set images that had random amounts of motion blur, reductions in scale, displacement, rotation, and fixed perspective distortions (affine transformations that could be called tilts) in each of 4 directions (up left right and down).
 
@@ -189,7 +190,7 @@ My final training set had 313191 images. My validation set and test set remained
 
 Comments in the Sermanet and Lecun paper indicated that care should be taken to ensure that the validation set did not include images that were taken from the same run of images taken from the same sign, as this would not give the best indication of how well the model worked on general examples of the signs.  I had not checked this.
 
-An example of an original Grayscale Image and a set of the augmented images generated from it are presented in Figure 6.
+An example of an original grayscaled image and a set of the augmented images generated from it are presented in Figure 6.
 
 ---
 
@@ -262,9 +263,9 @@ The code for my final model is located in code cell 24 of the jupyter notebook.
 
 
 
-#### Model Training.
+#### Model Training and Testing.
 
-The model was trained in cell ???
+The model was trained in code cell 27.
 
 During training runs, I tried to optimize hyper parameters including the batch size, training rate, and number of epochs.  I used the Adam (Adaptive Moment Estimation) optimizer as opposed to standard stochastic gradient descent optimizer.  After learning about explicit exponential decay of the training rate, I added it in to the training process.  My final parameters are presented in Table 6 and are present in the notebook in code cells 23 and 26.
 
@@ -281,15 +282,16 @@ During training runs, I tried to optimize hyper parameters including the batch s
 
 <U><B>Table 6:</B><I> Details of HyperParameters used in Model Training</I></U>
 
-
-The training code is present in code cell 27 of the Jupyter notebook.  The code to evaluate the accuracy on the test set is located in code cell 29.
-
 ---
+
+The code to evaluate the model performance with the test set is located in code cell 29.
 
 
 #### Model Evolution during completion of the Project 
 
-I started with the LeNet-5 model using RGB input, and then moved to using grayscale input and was able to increase the peak validation accuracy the model achieved from 90% to 93%.  I then augmented the input set with blurred, rotated, scaled, and displaced copies of the original data and this enabled the model to achieve validation accuracy above 95%.  At this point I experimented with adjusting the cv2 CLAHE algorithm, and found that I achieved best results when the cliplimit was increased to 32, and this increased validation accuracy to 96%.  At this point I found that I had been running dropout in the validation tests.  I restricted dropout to the training stage, and the validation accuracy increased to 97.8 and my first check on the test set gave an accuracy result of 95.6%.  (The accuracy calculation is completed in code cell 26)
+I started with the LeNet-5 model using the provided RGB image as input, but switched to using grayscaled input and was able to increase the peak validation accuracy the model achieved from 90% to 93%.  I then augmented the input set with blurred, rotated, scaled, and displaced copies of the original data and this enabled the model to achieve validation accuracy above 95%.  At this point I experimented with adjusting the cv2 CLAHE algorithm, and found that I achieved best results when the cliplimit was increased to 32, and this increased validation accuracy to 96%.  
+
+I also found that I had been running dropout in the validation tests.  I restricted dropout to the training stage, and the validation accuracy increased to 97.8.  At this point I ran my first check on the test set which produced an accuracy result of 95.6%.  (The accuracy function is completed in code cell 26)
 
 At this point I tried equalizing the input set so that there were an equal number of examples per class in the training set (See code cell 6).  This reduced the number of samples in the training set to approximately 20% of its original size.  Validation accuracy dropped to 95%, and test set accuracy dropped to 92%.
 
@@ -389,9 +391,7 @@ I generated Precision, Recall, and F1 Scores, and a confusion matrix for the tra
 
 The 7 images of signs I retrieved from the internet are shown in Figure 9.  I thought the sixth image (straight ahead) might be difficult to classify due to the distortion of the circular shape.
 
-The code for making predictions on my final model is located in the tenth cell of the Ipython notebook.
-
-The results of the predictions made by the model are given in Table 7.
+The code for making predictions on my final model is located in code cell 32 of the Ipython notebook.  The results of the predictions made by the model are given in Table 7.
 
 ---
 
@@ -452,13 +452,23 @@ Based on the precision and recall report (table 7) and confusion matrix (Figure 
 
 ---
 
-Of the 12630 images in the test set, 397 were incorrectly classified by the model.  Figure 10 presents 10 randomly selected samples of incorrectly classified images. The top 5 softmax predictions were generated for these images in code cell 30.  In 7 of the cases the model picked the correct sign as a second most likely choice, and in two it was the third choice.  Only with sign 9230, a "No Vehicles" sign, did the model fail to have the correct sign label in its top 5 selections.  The model was very unsure of any choice in this case, with probability of its highest choice being only 0.324 - similar to with random noise.
+Of the 12630 images in the test set, 397 were incorrectly classified by the model.  Figure 10 presents 10 randomly selected samples of incorrectly classified images. The top 5 softmax predictions were generated for these images in code cell 30.  In 7 of the cases the model picked the correct sign as the second most likely choice, and in two it was the third choice.  Only with sign 9230, a "No Vehicles" sign, did the model fail to pick the correct sign label in its top 5 selections.  The model was very unsure of any choice in this case, with the probability of its highest choice being only 0.324 - similar to with random noise.
 
 It was gratifying to me that I would have a hard time correctly guessing what category half of these samples(4722, 2141, 5786, 3124, 8945) belonged to as they were blurred or dark.  
 
-Based on these images, it appears that the model might be thrown off, where a human could easily identify the sign, by the presence of shading only on part of the image (image 5518), or by the presence of shiny glare spots (image 9230 and 12436).  I also think that CLAHE enhancement may be introducing features in areas of the image which are a single solid color (image 9230) where the algorithm attempts to maximize any local contrast.
+Based on these images, it appears that the model might be thrown off, where a human could easily identify the sign, by the presence of shading only on part of the image (image 5518), or by the presence of shiny glare spots (image 9230 and 12436).  I also think that CLAHE enhancement may be introducing features in areas of the image which are a single solid color (image 9230 - see figure 11) where the algorithm attempts to maximize any local contrast.
 
-The model could potentially be trained to overcome these issues by augmenting the training set with samples including artificially induced glare spots and shaded areas on the signs, and by investigating if CLAHE is introducing features on areas of solid color.
+---
+
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/test9230cv2.png?raw=true" alt="CLAHE generating noise" width=150>
+
+<U><B>Figure 11:</B><I> CLAHE Enhancement of Test image 9230</I></U>
+
+---
+
+
+
+The model could potentially be trained to overcome these issues by augmenting the training set with samples including artificially induced glare spots and shaded areas on the signs, and by investigating how CLAHE enhancement could be adjusted to prevent introduction of features on areas of solid color.
 
 
 #### Random Noise Sample
@@ -467,7 +477,7 @@ The model could potentially be trained to overcome these issues by augmenting th
 
 <img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/RandomNoise.png?raw=true" alt="Random Noise Sample" width=200>
 
-<U><B>Figure 11:</B><I> Synthetic image containing random noise</I></U>
+<U><B>Figure 12:</B><I> Synthetic image containing random noise</I></U>
 
 ---
  
@@ -483,7 +493,7 @@ The model could potentially be trained to overcome these issues by augmenting th
 <U><B>Table 9:</B><I> Top 5 Predictions and Probabilities generated by model on image of random noise</I></U>
 
 ---
-I created a random noise image (Figure 11) and ran it through the model. The top five guesses for a matching sign are presented in Table 9.  The low but fairly similar probabilities associated with all 5 top guesses suggests that the noise sample does not fit any of the sign classes particularly well.
+I created a random noise image (Figure 12) and ran it through the model. The top five guesses for a matching sign are presented in Table 9.  The low but fairly similar probabilities associated with all 5 top guesses suggests that the noise sample does not fit any of the sign classes particularly well.
 
 
 
@@ -495,13 +505,13 @@ I created a random noise image (Figure 11) and ran it through the model. The top
 <img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/KeeprightuntrainedmodelL1maxpool.png?raw=true" width=300>
 <img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/KeeprighttrainedmodelL1maxpool.png?raw=true" width=300>
 
-<U><B>Figure 12:</B><I> L1 Pool Feature map for keep right sign before and after training</I></U>
+<U><B>Figure 13:</B><I> L1 Pool Feature map for keep right sign before and after training</I></U>
 
 ---
 
 I created code to enable visualization of the feature maps for any image at all stages where the map was still rectangular (before flattening) which is located in code cell 35.  I found that the output of the layer 1 max pooling stage provided the best visual clues to how the model was working.  
 
-Figure 12 presents the feature maps for a "Keep Right" sign image before and after the model has been trained.  Whereas in the initial model the arrow and edge of the sign generally appear to have lower weighting, after being trained, these are the areas that are given highest weights and other areas of the sign are given no weight.
+Figure 13 presents the feature maps for a "Keep Right" sign image before and after the model has been trained.  Whereas in the initial model the arrow and edge of the sign generally appear to have lower weighting, after being trained, these are the areas that are given highest weights and other areas of the sign are given no weight.
 
 
 ### Additional Work
@@ -512,9 +522,9 @@ Figure 12 presents the feature maps for a "Keep Right" sign image before and aft
 |:--:|:-------|
 | Dataset Composition | Verify images in validation set are not part of "runs" of same exact sign present in training set |
 | Augmentation | Produce sets of images with artificial shading of portions of the sign | 
-| Augmentation | Investigate if CLAHE is introducing features on blank areas of solid color | 
+| Augmentation | Investigate how to prevent CLAHE introducing features on areas of solid color | 
 | Augmentation | Produce sets of images with glare spots on the sign | 
-| PreProcessing | Standardizing to a range of 1 |
+| PreProcessing | Standardizing to a range of 1 (instead of standard deviation of 1) |
 | Architecture | Conduct more investigation into the use of color information |
 | Architecture | Investigate effect of use of more layers |
 | Architecture | Investigate effect of changing the size of the layers |
