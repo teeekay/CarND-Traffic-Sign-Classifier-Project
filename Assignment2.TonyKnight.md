@@ -10,7 +10,7 @@
 
 ---
 
-Here is a link to my [Jupyter notebook code](https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_ClassifierV2_2.ipynb) and the [HTML version](https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_ClassifierV2_2.html) on Github.
+Here is a link to my [Jupyter notebook code](https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb) and the [HTML version](https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/report.html) on Github.
 
 ### Data Set Summary & Exploration
 
