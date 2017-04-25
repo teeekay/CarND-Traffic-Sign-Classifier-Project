@@ -1,6 +1,6 @@
 ### **Traffic Sign Recognition** 
 
-## Writeup by Tony Knight - 2017/04/21 
+## Writeup by Tony Knight - 2017/04/24 
 
 ---
 
@@ -10,7 +10,7 @@
 
 ---
 
-Here is a link to my [project code](https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_ClassifierV2_2.ipynb) on Github.
+Here is a link to my [Jupyter notebook code](https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_ClassifierV2_2.ipynb) and the [HTML version](https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_ClassifierV2_2.html) on Github.
 
 ### Data Set Summary & Exploration
 
@@ -144,13 +144,16 @@ I found that there was a large visual difference in the brightness of the images
 
 The code I used to convert the images is found in code cell 2 of the notebook.  I tested using both Scipy Image (skimage) and opencv (cv2) routines to complete the CLAHE enhancement after grayscaling the image.  I experimented with different tiling and cliplimit values to obtain both the best visual result, and a good pixel distribution (see image x above).
 
-An example of a traffic sign image before and after grayscaling and CLAHE enhancement is presented in figure 5.
+An example of a traffic sign image before and after grayscaling and CLAHE enhancement with skimage and cv2 is presented in figure 5.
 
 ---
 
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/traffic.png?raw=true" alt="RGB, and Grayscale and CLAHE versions of Traffic Sign Image" width=400>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/3436RGB.png?raw=true" alt="RGB" width=150>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/3436grayscale.png?raw=true" alt="grayscale" width=150>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/3436skimage.png?raw=true" alt="skimage CLAHE" width=150>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/3436cv2.png?raw=true" alt="cv2 CLAHE" width=150>
 
-<U><B>Figure 5:</B><I> Original RGB, and Grayscale and CLAHE versions of Traffic Sign Image</I></U>
+<U><B>Figure 5:</B><I> Original RGB, and Grayscale and CV2 and Skimage CLAHE versions of Traffic Sign Image</I></U>
 
 ---
 
@@ -160,7 +163,7 @@ As a last step, I normalized the image data using the individual image mean and 
 
 Starting with the training, validation, and test data sets provided, I used two strategies to try and improve validation accuracy.  First, I tried equalizing the training data set so that there were an equal number of images in each class of image, and in this way the model would not be biased to select images that were over-represented in the training dataset.  However, In my tests, this did not improve validation or test accuracy, possibly because this limited the size of the training set too much.
 
-Secondly , I tried augmenting the training dataset by adding distortions of the original images.  In code cells 11 to 19 I generated copies of the validation set images that had random amounts of motion blur, reductions in scale, displacement, rotation, and fixed perspective distortions (affine transformations that could be called tilts) in each of 4 directions (up left right and down).
+Secondly , I tried augmenting the training dataset by adding distortions of the original images.  In code cells 10 to 18 I generated copies of the validation set images that had random amounts of motion blur, reductions in scale, displacement, rotation, and fixed perspective distortions (affine transformations that could be called tilts) in each of 4 directions (up left right and down).
 
 ---
 
@@ -190,35 +193,26 @@ An example of an original Grayscale Image and a set of the augmented images gene
 
 ---
 
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/orig.png?raw=true" alt="Original" width=200>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/orig.png?raw=true" alt="Original" width=150>
 
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/blur.png?raw=true" alt="Augmented" width=200>
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/displaced.png?raw=true" alt="Augmented" width=200>
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/rotated.png?raw=true" alt="Augmented" width=200>
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/scaled.png?raw=true" alt="Augmented" width=200>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/blur.png?raw=true" alt="Augmented" width=150>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/displaced.png?raw=true" alt="Augmented" width=150>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/rotated.png?raw=true" alt="Augmented" width=150>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/scaled.png?raw=true" alt="Augmented" width=150>
 
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/tiltup.png?raw=true" alt="Augmented" width=200>
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/tiltdown.png?raw=true" alt="Augmented" width=200>
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/tiltleft.png?raw=true" alt="Augmented" width=200>
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/tiltright.png?raw=true" alt="Augmented" width=200>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/tiltup.png?raw=true" alt="Augmented" width=150>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/tiltdown.png?raw=true" alt="Augmented" width=150>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/tiltleft.png?raw=true" alt="Augmented" width=150>
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/augments/tiltright.png?raw=true" alt="Augmented" width=150>
 
 
 <U><B>Figure 6:</B><I> Original grayscale image of traffic sign and set of augmented images produced from it</I></U>
 
 ---
 
-#### 3. Multi-Scale Convolutional Network
 
----
+#### Multi-Scale Convolutional Network Architecture Design
 
-<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/MultiScaleLenet.png?raw=true" alt="Multi Scale Convolutional Network Diagram" width="600">
-
-<U><B>Figure 7:</B><I> Diagram of Final version of Multi-Scale Convolutional Network</I></U>
-
----
-
-A visualization of the final model is displayed in Figure 7, and is also summarized in Table 5. 
-The code for my final model is located in the seventh cell of the jupyter notebook. 
 
 ---
 
@@ -254,11 +248,25 @@ The code for my final model is located in the seventh cell of the jupyter notebo
 
 ---
 
+A visualization of the final model is displayed in Figure 7, and is also summarized in Table 5. 
+The code for my final model is located in code cell 24 of the jupyter notebook. 
+
+
+---
+
+<img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/MultiScaleLenet.png?raw=true" alt="Multi Scale Convolutional Network Diagram" width="600">
+
+<U><B>Figure 7:</B><I> Diagram of Final version of Multi-Scale Convolutional Network</I></U>
+
+---
+
+
+
 #### Model Training.
 
 The model was trained in cell ???
 
-During training runs, I tried to optimize hyper parameters including the batch size, training rate, and number of epochs.  I used the Adam (Adaptive Moment Estimation) optimizer as opposed to standard stochastic gradient descent optimizer.  After learning about explicit exponential decay of the training rate, I added it in to the training process.  My final parameters are presented in Table 6.
+During training runs, I tried to optimize hyper parameters including the batch size, training rate, and number of epochs.  I used the Adam (Adaptive Moment Estimation) optimizer as opposed to standard stochastic gradient descent optimizer.  After learning about explicit exponential decay of the training rate, I added it in to the training process.  My final parameters are presented in Table 6 and are present in the notebook in code cells 23 and 26.
 
 ---
 
@@ -273,18 +281,19 @@ During training runs, I tried to optimize hyper parameters including the batch s
 
 <U><B>Table 6:</B><I> Details of HyperParameters used in Model Training</I></U>
 
----
 
-Initially I used the ReLU activation function in layers, but I switched to using ELU activation after reading that it had been shown to learn faster and perform better.
+The training code is present in code cell 27 of the Jupyter notebook.  The code to evaluate the accuracy on the test set is located in code cell 29.
+
+---
 
 
 #### Model Evolution during completion of the Project 
 
-I started with the LeNet-5 model using RGB input, and then moved to using grayscale input and was able to increase peak the peak validation accuracy it achieved from 90% to 93%.  I then augmented the input set and this enabled the model to achieve validation accuracy above 95%.  At this point I experimented with adjusting the cv2 CLAHE algorithm, and found that I achieved best results when the cliplimit was increased to 32, and this increased validation accuracy to 96%.  At this point I found that I had been running dropout in the validation tests.  I restricted dropout to the training stage, and the validation accuracy increased to 97.8 and my first check on the test set gave an accuracy result of 95.6%.  (My accuracy calculations are completed in code cell XXX)
+I started with the LeNet-5 model using RGB input, and then moved to using grayscale input and was able to increase the peak validation accuracy the model achieved from 90% to 93%.  I then augmented the input set with blurred, rotated, scaled, and displaced copies of the original data and this enabled the model to achieve validation accuracy above 95%.  At this point I experimented with adjusting the cv2 CLAHE algorithm, and found that I achieved best results when the cliplimit was increased to 32, and this increased validation accuracy to 96%.  At this point I found that I had been running dropout in the validation tests.  I restricted dropout to the training stage, and the validation accuracy increased to 97.8 and my first check on the test set gave an accuracy result of 95.6%.  (The accuracy calculation is completed in code cell 26)
 
 At this point I tried equalizing the input set so that there were an equal number of examples per class in the training set (See code cell 6).  This reduced the number of samples in the training set to approximately 20% of its original size.  Validation accuracy dropped to 95%, and test set accuracy dropped to 92%.
 
-I ran tests substituting the skimage (scikit-image) version of CLAHE instead of the CV2 variant and played with the parameters.  I found I could achieve comparable accuracy results, but that the skimage results were not as visually pleasing and were generally darker, so I switched back to cv2.
+I ran tests substituting the skimage (scikit-image) version of CLAHE instead of the CV2 variant and played with the parameters.  I found I could achieve comparable accuracy results, but that the skimage results were not as visually pleasing and were generally darker, so I switched back to CV2.
 
 I had originally been standardizing the input using the mean and standard deviation of the set, but switched to using the values calculated from each individual image.  This had little effect on the results produced by the model, possibly because the CLAHE enhanced images have relatively similar intensity distributions.
 
@@ -302,7 +311,7 @@ I then tried increasing the width of the layers, adjusting the first convolution
 
 I ran the model a few times for a longer set of Epochs and introduced the use of a decaying learning rate. <B>My final results were Training Accuracy 98.10%, Validation Accuracy 98.84%, Loss 0.082, Test set 96.86%,  and 7 for 7 on the Internet Images</B>.
 
-I generated Precision, Recall, and F1 Scores, and a confusion matrix for the trained model (See Table 7 and Figure 7).  These tables generally showed the model was relatively good at classifying the images, with one particularly poor exception.  Class 27, 'pedestrians', has both bad precision and recall and a dismal F1 rating of 61.3 whereas the scores for the other classes often in the high 90's but generally above high 80s. 
+I generated Precision, Recall, and F1 Scores, and a confusion matrix for the trained model (See Table 7 and Figure 8).  These tables generally showed the model was relatively good at classifying the images, with one particularly poor exception.  Class 27, 'pedestrians', has both bad precision and recall and a dismal F1 rating of 61.3 whereas the scores for the other classes often in the high 90's but generally above high 80s. 
 
 ---
 
@@ -358,7 +367,7 @@ I generated Precision, Recall, and F1 Scores, and a confusion matrix for the tra
 
 <img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/Confusion.png?raw=true" alt="Confusion Matrix" width=400>
 
-<U><B>Figure 7:</B><I> Confusion Matrix generated from the model (Darker implies more hits)</I></U>
+<U><B>Figure 8:</B><I> Confusion Matrix generated from the model (Darker implies more hits)</I></U>
 
 ---
 
@@ -374,11 +383,11 @@ I generated Precision, Recall, and F1 Scores, and a confusion matrix for the tra
 <img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/TestSamples/Straightahead.png?raw=true" width=100>
 <img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/TestSamples/yield.png?raw=true" width=100>
 
-<U><B>Figure 8:</B><I> Road sign images clipped from the Internet</I></U>
+<U><B>Figure 9:</B><I> Road sign images clipped from the Internet</I></U>
 
 ---
 
-The 7 images of signs I retrieved from the internet are shown in Figure 8.  I thought the sixth image (straight ahead) might be difficult to classify due to the distortion of the circular shape.
+The 7 images of signs I retrieved from the internet are shown in Figure 9.  I thought the sixth image (straight ahead) might be difficult to classify due to the distortion of the circular shape.
 
 The code for making predictions on my final model is located in the tenth cell of the Ipython notebook.
 
@@ -400,9 +409,9 @@ The results of the predictions made by the model are given in Table 7.
 
 ---
 
-The model was able to correctly guess All 7 traffic signs, giving an accuracy of 100%. This compares favorably to the accuracy on the test set of 96.8%.  The softmax probability for 5 generated for the fist choice for 5 of the images was effectively 1 (0.999 or greater).  
+The model was able to correctly guess all 7 traffic signs, giving an accuracy of 100%. This compares favorably to the accuracy on the test set of 96.8%.  The softmax probability generated for the first choice on 5 of the images was effectively 1 (0.999 or greater).  
 
-The model was 99.6% sure of the "No Entry" sign prediction, generating only .003 and .001 chance of the sign being a Yield or Stop sign respectively.  This was somewhat interesting as the "No Entry" sign is circular whereas the Yield and Stop signs have straight edges (triangle and octoganal).  
+The model was 0.996 sure of the "No Entry" sign prediction, generating only .003 and .001 chance of the sign being a Yield or Stop sign respectively.  This was somewhat interesting as the "No Entry" sign is circular whereas the Yield and Stop signs have straight edges (triangle and octoganal).  
 
 The "Ahead Only" sign had the lowest top prediction probability of 0.942, which was still very good, with secondary guesses of General Caution, Traffic Signals, Speed Limit, and Go Straight or Left rounding out the top 5 predictions.  (See Table 8 for details and notes).  
 
@@ -419,7 +428,7 @@ The "Ahead Only" sign had the lowest top prediction probability of 0.942, which 
 
 ---
 
-Based on the precision and recall report (table ) and confusion matrix (Figure  generated on the results from the test set; 1 image each from classes 11, 12, 13, 33, 40, 2 images from 34, and 8 from 37 were classified as 35 (Ahead Only), but no class 35 images were classified in any other class (perfect precision, but lower recall).
+Based on the precision and recall report (table 7) and confusion matrix (Figure 8) generated on the results from the test set; one image each from classes 11, 12, 13, 33, 40, two images from class 34, and eight from class 37 were incorrectly classified as class 35 (Ahead Only), but no class 35 images were classified in any other class (perfect precision, but less than perfect recall).
 
 
 ### Failures in Model Prediction
@@ -439,11 +448,11 @@ Based on the precision and recall report (table ) and confusion matrix (Figure  
 <img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/9notruckpassing.png?raw=true" width=150>
 <img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/incorrectchoices/10roundabout.png?raw=true" width=150>
 
-<U><B>Figure 9:</B><I> 10 sign images incorrectly classified by the model</I></U>
+<U><B>Figure 10:</B><I> 10 sign images incorrectly classified by the model</I></U>
 
 ---
 
-Of the 12630 images in the test set, 397 were incorrectly classified by the model.  Figure 9 presents 10 randomly selected samples of incorrectly classified images. The top 5 softmax predictions were generated for these images in cell ???.  In 7 of the cases the model picked the correct sign as a second most likely choice, and in two it was the third choice.  Only with sign 9230, a "No Vehicles" sign, did the model fail to have the correct sign label in its top 5 selections.  The model was very unsure of any choice in this case, with probability of its highest choice being only 0.324 - similar to with random noise.
+Of the 12630 images in the test set, 397 were incorrectly classified by the model.  Figure 10 presents 10 randomly selected samples of incorrectly classified images. The top 5 softmax predictions were generated for these images in code cell 30.  In 7 of the cases the model picked the correct sign as a second most likely choice, and in two it was the third choice.  Only with sign 9230, a "No Vehicles" sign, did the model fail to have the correct sign label in its top 5 selections.  The model was very unsure of any choice in this case, with probability of its highest choice being only 0.324 - similar to with random noise.
 
 It was gratifying to me that I would have a hard time correctly guessing what category half of these samples(4722, 2141, 5786, 3124, 8945) belonged to as they were blurred or dark.  
 
@@ -458,7 +467,7 @@ The model could potentially be trained to overcome these issues by augmenting th
 
 <img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/RandomNoise.png?raw=true" alt="Random Noise Sample" width=200>
 
-<U><B>Figure 8:</B><I> Synthetic image containing random noise</I></U>
+<U><B>Figure 11:</B><I> Synthetic image containing random noise</I></U>
 
 ---
  
@@ -474,7 +483,7 @@ The model could potentially be trained to overcome these issues by augmenting th
 <U><B>Table 9:</B><I> Top 5 Predictions and Probabilities generated by model on image of random noise</I></U>
 
 ---
-I created a random noise image (image 10) and ran it through the model. The top five guesses for a matching sign are presented in Table 9.  The low but fairly similar probabilities associated with all 5 top guesses suggests that the noise sample does not fit any of the sign classes particularly well.
+I created a random noise image (Figure 11) and ran it through the model. The top five guesses for a matching sign are presented in Table 9.  The low but fairly similar probabilities associated with all 5 top guesses suggests that the noise sample does not fit any of the sign classes particularly well.
 
 
 
@@ -486,16 +495,17 @@ I created a random noise image (image 10) and ran it through the model. The top 
 <img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/KeeprightuntrainedmodelL1maxpool.png?raw=true" width=300>
 <img src="https://github.com/teeekay/CarND-Traffic-Sign-Classifier-Project/blob/master/examples/KeeprighttrainedmodelL1maxpool.png?raw=true" width=300>
 
-<U><B>Figure 10:</B><I> L1 Pool Feature map for keep right sign before and after training</I></U>
+<U><B>Figure 12:</B><I> L1 Pool Feature map for keep right sign before and after training</I></U>
 
 ---
 
-I created code to enable visualization of the feature maps for any image at all stages where the map was still rectangular (before flattening) which is in code cell .  I found that the output of the layer 1 max pooling stage provided the best visual clues to how the model was working.  
+I created code to enable visualization of the feature maps for any image at all stages where the map was still rectangular (before flattening) which is located in code cell 35.  I found that the output of the layer 1 max pooling stage provided the best visual clues to how the model was working.  
 
-Figure 10 presents the feature maps for a "Keep Right" sign image before and after the model has been trained.  Whereas in the initial model the arrow and edge of the sign generally appear to have lower weighting, after being trained, these are the areas that are given highest weights and other areas of the sign are given no weight.
+Figure 12 presents the feature maps for a "Keep Right" sign image before and after the model has been trained.  Whereas in the initial model the arrow and edge of the sign generally appear to have lower weighting, after being trained, these are the areas that are given highest weights and other areas of the sign are given no weight.
 
 
 ### Additional Work
+
 ---
 
 |Area | Investigate |
@@ -515,4 +525,3 @@ Figure 10 presents the feature maps for a "Keep Right" sign image before and aft
 ---
 
 Table 10 presents areas that could be investigated to see if the model's prediction could be improved, however, I ran out of time and was not able to investigate them.
-
